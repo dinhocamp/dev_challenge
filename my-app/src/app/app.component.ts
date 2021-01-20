@@ -11,4 +11,7 @@ export class AppComponent {
     this.searchedItem = e.target.value;
     console.log(this.searchedItem);
   }
+  upload(e: any) {
+    console.log(e.target.files[0]);
+  }
 }
