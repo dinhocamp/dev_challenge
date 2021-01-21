@@ -15,6 +15,8 @@ db.Sequelize = Sequelize;
 db.image = (sequelize, Sequelize) => {
   return sequelize.define("image", {
     image: { type: Sequelize.STRING },
+    label: { type: Sequelize.STRING },
   });
 };
+db.image(sequelize, Sequelize);
 module.exports = db;
