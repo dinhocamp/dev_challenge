@@ -1,5 +1,6 @@
 import { HttpClient } from '@angular/common/http';
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
+import { observable } from 'rxjs';
 import { AppService } from './app.service';
 
 @Component({
@@ -7,9 +8,11 @@ import { AppService } from './app.service';
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss'],
 })
-export class AppComponent {
-  constructor(private appService: AppService) {}
+export class AppComponent implements OnInit {
+  constructor(private appService: AppService, private http: HttpClient) {}
+  total = null;
   searchedItem = null;
+  arr = [];
   changed(e: any) {
     this.searchedItem = e.target.value;
     console.log(this.searchedItem);
@@ -26,5 +29,23 @@ export class AppComponent {
           console.log(response);
         });
     };
+  }
+  delete(el: any) {
+    console.log(el);
+    this.http
+      .post('http://localhost:8080/delete', { images: el })
+      .subscribe((data: any) => {
+        console.log(data);
+      });
+  }
+  ngOnInit() {
+    let k: any = [];
+    this.http.get('http://localhost:8080/').subscribe((data: any) => {
+      console.log(data);
+      for (var i in data) {
+        k.push(data[i].images);
+      }
+      this.arr = k;
+    });
   }
 }

@@ -12,11 +12,12 @@ const sequelize = new Sequelize(
 const db = {};
 db.sequelize = sequelize;
 db.Sequelize = Sequelize;
-db.image = (sequelize, Sequelize) => {
-  return sequelize.define("image", {
-    image: { type: Sequelize.STRING },
+let fn = (sequelize, Sequelize) => {
+  let images = sequelize.define("images", {
+    images: { type: Sequelize.STRING },
     label: { type: Sequelize.STRING },
   });
+  return images;
 };
-db.image(sequelize, Sequelize);
+db.images = fn(sequelize, Sequelize);
 module.exports = db;

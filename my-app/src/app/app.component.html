@@ -1,3 +1,9 @@
 <input type="file" (change)="upload($event)" />
 <input type="search" (change)="changed($event)" />
 <button>search</button>
+<h1>
+  <div class="images" *ngFor="let i of arr">
+    <img src="{{ i }}" />
+    <button (click)="delete(i)">delete</button>
+  </div>
+</h1>
