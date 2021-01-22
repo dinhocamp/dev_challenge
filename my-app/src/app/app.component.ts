@@ -10,25 +10,32 @@ import { AppService } from './app.service';
 })
 export class AppComponent implements OnInit {
   constructor(private appService: AppService, private http: HttpClient) {}
-  total = null;
+  label: any = '';
   searchedItem = null;
   arr = [];
+  change1(e: any) {
+    this.label = e.target.value;
+    console.log(this.label);
+  }
   changed(e: any) {
     this.searchedItem = e.target.value;
     console.log(this.searchedItem);
   }
   upload(e: any) {
-    let select = e.target.files[0];
-    const file = new FileReader();
-    file.readAsDataURL(select);
-    file.onloadend = () => {
-      this.appService
-        .upload(file.result as string)
-        .subscribe((response: any) => {
-          console.log('nothing');
-          console.log(response);
-        });
-    };
+    console.log(this.label);
+    if (this.label.length !== 0) {
+      let select = e.target.files[0];
+      const file = new FileReader();
+      file.readAsDataURL(select);
+      file.onloadend = () => {
+        this.appService
+          .upload(file.result as string, this.label)
+          .subscribe((response: any) => {
+            console.log('nothing');
+            console.log(response);
+          });
+      };
+    }
   }
   delete(el: any) {
     console.log(el);
@@ -43,7 +50,7 @@ export class AppComponent implements OnInit {
     this.http.get('http://localhost:8080/').subscribe((data: any) => {
       console.log(data);
       for (var i in data) {
-        k.push(data[i].images);
+        k.unshift(data[i].images);
       }
       this.arr = k;
     });

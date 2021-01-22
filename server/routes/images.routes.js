@@ -17,7 +17,7 @@ module.exports = (app) => {
         console.log("response from cloud", response);
         console.log(db);
         db.images
-          .create({ images: response.url })
+          .create({ images: response.url, label: req.body.label })
           .then(() => {
             res.send({ msg: "shit is in db now" });
           })
@@ -40,14 +40,23 @@ module.exports = (app) => {
   });
   app.post("/delete", (req, res) => {
     console.log(req.body);
-    db.images
-      .destroy({ where: req.body })
-      .then(() => {
-        res.send({ ms: "shit is deleted" });
-      })
-      .catch(() => {
-        req.send("problem deleting");
-        console.log("error deleting shit");
-      });
+    const arr = req.body.images.split("/");
+    let c = arr[arr.length - 1].split(".")[0];
+    cloudinary.uploader.destroy(c, function (err, response) {
+      if (err) {
+        console.log("err from cloudinary deleting shit");
+      } else {
+        console.log("shit is deleted on the cloud ");
+        db.images
+          .destroy({ where: req.body })
+          .then(() => {
+            res.send({ ms: "shit is deleted" });
+          })
+          .catch(() => {
+            req.send("problem deleting");
+            console.log("error deleting shit");
+          });
+      }
+    });
   });
 };
